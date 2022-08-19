@@ -24,5 +24,5 @@ const (
 	// same timeout, this one.
 	// TODO: Consider dropping from 240 to 60 seconds. I don't think waiting
 	// 4 minutes versus 1 minute makes a real difference.
-	ContainerCreateTimeout = 240 * time.Second
+	ContainerCreateTimeout = 600 * time.Second
 )
