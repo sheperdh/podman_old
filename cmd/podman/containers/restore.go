@@ -73,6 +73,8 @@ func init() {
 	flags.BoolVar(&restoreOptions.IgnoreStaticMAC, "ignore-static-mac", false, "Ignore MAC address set via --mac-address")
 	flags.BoolVar(&restoreOptions.IgnoreVolumes, "ignore-volumes", false, "Do not export volumes associated with container")
 
+	flags.StringVar(&restoreOptions.ImagePath, "image-path", "", "Restore container from an image path")
+
 	flags.StringSliceP(
 		"publish", "p", []string{},
 		"Publish a container's port, or a range of ports, to the host (default [])",

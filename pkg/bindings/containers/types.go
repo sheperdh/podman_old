@@ -80,6 +80,8 @@ type RestoreOptions struct {
 	PrintStats     *bool
 	PublishPorts   []string
 	FileLocks      *bool
+	// Image path to restore from
+	ImagePath *string
 }
 
 //go:generate go run ../generator/generator.go CreateOptions
