@@ -441,6 +441,7 @@ func (ic *ContainerEngine) ContainerRestore(ctx context.Context, namesOrIds []st
 	options.WithPod(opts.Pod)
 	options.WithPrintStats(opts.PrintStats)
 	options.WithPublishPorts(opts.PublishPorts)
+	options.ImagePath = &opts.ImagePath
 
 	if opts.Import != "" {
 		options.WithImportArchive(opts.Import)

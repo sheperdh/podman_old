@@ -706,7 +706,8 @@ func (r *ConmonOCIRuntime) AttachResize(ctr *Container, newSize resize.TerminalS
 // CheckpointContainer checkpoints the given container.
 func (r *ConmonOCIRuntime) CheckpointContainer(ctr *Container, options ContainerCheckpointOptions) (int64, error) {
 	// imagePath is used by CRIU to store the actual checkpoint files
-	imagePath := ctr.CheckpointPath()
+	imagePath := ctr.CheckpointPathWithOptions(&options)
+
 	if options.PreCheckPoint {
 		imagePath = ctr.PreCheckPointPath()
 	}
@@ -1045,7 +1046,8 @@ func (r *ConmonOCIRuntime) createOCIContainer(ctr *Container, restoreOptions *Co
 	}
 
 	if restoreOptions != nil {
-		args = append(args, "--restore", ctr.CheckpointPath())
+		imagePath := ctr.CheckpointPathWithOptions(restoreOptions)
+		args = append(args, "--restore", imagePath)
 		if restoreOptions.TCPEstablished {
 			args = append(args, "--runtime-opt", "--tcp-established")
 		}

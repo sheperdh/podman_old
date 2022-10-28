@@ -199,6 +199,7 @@ type CheckpointOptions struct {
 	Compression    archive.Compression
 	PrintStats     bool
 	FileLocks      bool
+	ImagePath      string
 }
 
 type CheckpointReport struct {
@@ -226,6 +227,7 @@ type RestoreOptions struct {
 	Pod             string
 	PrintStats      bool
 	FileLocks       bool
+	ImagePath       string
 }
 
 type RestoreReport struct {

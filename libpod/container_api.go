@@ -873,6 +873,8 @@ type ContainerCheckpointOptions struct {
 	// FileLocks tells the API to checkpoint/restore a container
 	// with file-locks
 	FileLocks bool
+	// set image path
+	ImagePath string
 }
 
 // Checkpoint checkpoints a container

@@ -649,6 +649,7 @@ func (ic *ContainerEngine) ContainerCheckpoint(ctx context.Context, namesOrIds [
 		PrintStats:     options.PrintStats,
 		FileLocks:      options.FileLocks,
 		CreateImage:    options.CreateImage,
+		ImagePath:      options.ImagePath,
 	}
 
 	idToRawInput := map[string]string{}
@@ -706,6 +707,7 @@ func (ic *ContainerEngine) ContainerRestore(ctx context.Context, namesOrIds []st
 		Pod:             options.Pod,
 		PrintStats:      options.PrintStats,
 		FileLocks:       options.FileLocks,
+		ImagePath:       options.ImagePath,
 	}
 
 	filterFuncs := []libpod.ContainerFilter{

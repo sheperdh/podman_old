@@ -1433,7 +1433,7 @@ func (c *Container) checkpoint(ctx context.Context, options ContainerCheckpointO
 
 	// Setting CheckpointLog early in case there is a failure.
 	c.state.CheckpointLog = path.Join(c.bundlePath(), "dump.log")
-	c.state.CheckpointPath = c.CheckpointPath()
+	c.state.CheckpointPath = c.CheckpointPathWithOptions(&options)
 
 	runtimeCheckpointDuration, err := c.ociRuntime.CheckpointContainer(c, options)
 	if err != nil {
@@ -1476,8 +1476,8 @@ func (c *Container) checkpoint(ctx context.Context, options ContainerCheckpointO
 	// There is a bug from criu: https://github.com/checkpoint-restore/criu/issues/116
 	// We have to change the symbolic link from absolute path to relative path
 	if options.WithPrevious {
-		os.Remove(path.Join(c.CheckpointPath(), "parent"))
-		if err := os.Symlink("../pre-checkpoint", path.Join(c.CheckpointPath(), "parent")); err != nil {
+		os.Remove(path.Join(c.CheckpointPathWithOptions(&options), "parent"))
+		if err := os.Symlink("../pre-checkpoint", path.Join(c.CheckpointPathWithOptions(&options), "parent")); err != nil {
 			return nil, 0, err
 		}
 	}
@@ -1671,7 +1671,7 @@ func (c *Container) restore(ctx context.Context, options ContainerCheckpointOpti
 
 	// Let's try to stat() CRIU's inventory file. If it does not exist, it makes
 	// no sense to try a restore. This is a minimal check if a checkpoint exist.
-	if _, err := os.Stat(filepath.Join(c.CheckpointPath(), "inventory.img")); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(c.CheckpointPathWithOptions(&options), "inventory.img")); os.IsNotExist(err) {
 		return nil, 0, fmt.Errorf("a complete checkpoint for this container cannot be found, cannot restore: %w", err)
 	}
 
@@ -1681,7 +1681,7 @@ func (c *Container) restore(ctx context.Context, options ContainerCheckpointOpti
 
 	// Setting RestoreLog early in case there is a failure.
 	c.state.RestoreLog = path.Join(c.bundlePath(), "restore.log")
-	c.state.CheckpointPath = c.CheckpointPath()
+	c.state.CheckpointPath = c.CheckpointPathWithOptions(&options)
 
 	// Read network configuration from checkpoint
 	var netStatus map[string]types.StatusBlock
@@ -1979,9 +1979,9 @@ func (c *Container) restore(ctx context.Context, options ContainerCheckpointOpti
 		// should exist. Still ignoring errors for now as the container should be
 		// restored and running. Not erroring out just because some cleanup operation
 		// failed. Starting with the checkpoint directory
-		err = os.RemoveAll(c.CheckpointPath())
+		err = os.RemoveAll(c.CheckpointPathWithOptions(&options))
 		if err != nil {
-			logrus.Debugf("Non-fatal: removal of checkpoint directory (%s) failed: %v", c.CheckpointPath(), err)
+			logrus.Debugf("Non-fatal: removal of checkpoint directory (%s) failed: %v", c.CheckpointPathWithOptions(&options), err)
 		}
 		c.state.CheckpointPath = ""
 		err = os.RemoveAll(c.PreCheckPointPath())

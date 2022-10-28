@@ -75,6 +75,8 @@ func init() {
 	flags.StringP("compress", "c", "zstd", "Select compression algorithm (gzip, none, zstd) for checkpoint archive.")
 	_ = checkpointCommand.RegisterFlagCompletionFunc("compress", common.AutocompleteCheckpointCompressType)
 
+	flags.StringVarP(&checkpointOptions.ImagePath, "image-path", "", "", "Save checkpoint files to specific path")
+
 	flags.BoolVar(
 		&checkpointOptions.PrintStats,
 		"print-stats",
